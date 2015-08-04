@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewpoint" content="width=device-width, initial-width=1.0">
+	<link rel="stylesheet" href="css/style.css">
+	<title>CodePlayer</title>
+	
+	<!-- reference jquery -->
+	<script src="jquery.js"></script>
+</head>
+<body>
+	<div id="container">
+		<div id="menubar">
+			<div id="logo">
+				<h2>Code Player</h2>
+			</div>
+			<div id="buttonDiv">
+				<button id="runButton">Run</button>
+			</div>
+			<div id="menu">
+				<ul>
+					<li class="selector selected">HTML</li>
+					<li class="selector">CSS</li>
+					<li class="selector">JS</li>
+					<li class="selector selected">Result</li>
+				</ul>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div class="codeContent">
+			<div class="codeContainer" id="HTMLContainer">
+				<div class="codeLabel">HTML</div>
+				<textarea class="code" id="html">Example Code</textarea>
+			</div>
+			<div class="codeContainer" id="CSSContainer">
+				<div class="codeLabel">CSS</div>
+				<textarea class="code" id="css">Example Code</textarea>
+			</div>
+			<div class="codeContainer" id="JSContainer">
+				<div class="codeLabel">JS</div>
+				<textarea class="code" id="js">Example Code</textarea>
+			</div>
+			<div class="codeContainer">
+				<div class="codeLabel">Result</div>
+				<iframe id="resultFrame"></iframe>
+			</div>
+		</div>
+
+		<script>
+		 	$(document).ready(function(){
+		 		var $codeContainerHeight = $(window).height() - $('#menubar').height();
+		 		$('.codeContainer').css('height', $codeContainerHeight + 'px');
+
+		 		$('.selector').click(function(){
+		 			var $this = $(this);
+		 			$this.toggleClass('selected');
+
+		 			var selectedDiv = $this.html();
+		 			$('#' + selectedDiv + 'Container').toggle();
+
+		 			var selectedDivNum = $('.codeContainer').filter(function(){
+		 				return $(this).css('display')!= 'none';
+		 			}).length;
+
+		 			var width = 100 / selectedDivNum;
+		 			
+		 			$('.codeContainer').css('width', width + '%');
+
+		 		});
+		 		$('#runButton').click(function(){
+		 			$('#resultFrame').contents().find('html').html('<style>'+$('#css').val()+ '</style>' + $('#html').val());
+
+		 			document.getElementById('resultFrame').contentWindow.eval($('#js').val());
+		 		});
+
+		 	});
+		</script>
+</body>
+</html>
